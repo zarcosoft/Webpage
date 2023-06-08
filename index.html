@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antenas</title>
+    <style>
+        @keyframes tipsy {
+            0% {
+              transform: translateX(-50%) translateY(-50%) rotate(0deg);
+            }
+            100% {
+              transform: translateX(-50%) translateY(-50%) rotate(360deg);
+            }
+          }
+          
+          body {
+            font-family: helvetica, arial, sans-serif;
+            background-color: #2e2e31;
+          }
+          
+          .a {
+            color: #fffbf1;
+            text-shadow: 0 20px 25px #2e2e31, 0 40px 60px #2e2e31;
+            font-size: 80px;
+            font-weight: bold;
+            text-decoration: none;
+            letter-spacing: -3px;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+          }
+          
+          .a:before,
+          .a:after {
+            content: '';
+            padding: .9em .4em;
+            position: absolute;
+            left: 50%;
+            width: 100%;
+            top: 50%;
+            display: block;
+            border: 15px solid rgb(62, 65, 68);
+            transform: translateX(-50%) translateY(-50%) rotate(0deg);
+            animation: 10s infinite alternate ease-in-out tipsy;
+          }
+          
+          .a:before {
+            border-color: #262527 #2e2c2c rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+            z-index: -1;
+          }
+          
+          .a:after {
+            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #3b3838 #181616;
+            box-shadow: 25px 25px 25px rgba(46, 46, 49, .8);
+          }
+        .nombreLetra{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .letra{
+            transition: 0.4s;
+            transform: translateX(0);
+            cursor: grab;
+            color: #fff;
+            text-size-adjust: 100%;
+        }
+        .letra:hover{
+            transform: translateY(-1rem);
+            background: -webkit-linear-gradient(120deg, hsl(19, 90%,52%), hsl(56, 100%, 50%));
+            background-clip: initial;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cantEnlaces{
+            font-size: xx-large;
+        }
+
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script defer src="https://app.embed.im/snow.js"></script>    
+    <!-- El código anterior está importando y enlazando varios archivos CSS y JavaScript, incluyendo las librerías Bootstrap y
+     jQuery, al documento HTML. También está incluyendo un script para el widget de chat Embed (con el fin de dar el efecto de 
+     nieve). -->
+    <script>
+
+        /*El siguiente código es una función JavaScript que se activa cuando se envía un formulario. En obtiene los datos de los 
+        campos del formulario, los valida, los añade a una matriz de objetos y luego añade una nueva fila a una tabla HTML con 
+        los datos del formulario. En También restablece los campos del formulario y actualiza un recuento del número de antenas 
+        en la matriz.*/
+
+        let antena = [];
+
+        function cargarDatos() {
+            let nombre = document.getElementById("nombre").value;
+            let ubicacion = document.getElementById("ubicacion").value;
+            let vlan = [
+                document.getElementById("vlan1").value, 
+                document.getElementById("vlan2").value,
+                document.getElementById("vlan3").value, 
+                document.getElementById("vlan4").value];
+
+            let niveles = {
+                throughput: document.getElementById("niveles1").value,
+                snr: document.getElementById("niveles2").value
+            };
+
+            let estado = document.getElementById("estado").value;
+
+            for (var i = 0; i < vlan.length; i++) { 
+                vlan[i] = parseInt(vlan[i]); 
+            }
+            niveles.throughput = parseInt(document.getElementById("niveles1").value);
+            niveles.snr = parseInt(document.getElementById("niveles2").value); 
+
+            if (nombre != "" && ubicacion != "" && vlan[0] != null && niveles.throughput != "" && niveles.snr != "" && estado != "") {
+                var table = document.getElementById("tbGeneral").getElementsByTagName("tbody")[0]; //inserta fila en orden de su llegada a la tabla 
+                var row = table.insertRow(-1); //inserta celdas 
+                var celda1=row.insertCell(0); 
+                var celda2 = row.insertCell(1); 
+                var celda3 = row.insertCell(2); 
+                var celda4 = row.insertCell(3); 
+                var celda5 = row.insertCell(4); 
+                var celda6 = row.insertCell(5); 
+                var celda7 = row.insertCell(6);
+                var celda8 = row.insertCell(7); 
+                var celda9 = row.insertCell(8); 
+                var celda10 = row.insertCell(9); 
+                let antenas = {
+                    id: antena.length + 1, 
+                    nombre: nombre, 
+                    ubicacion: ubicacion, 
+                    Vlan: vlan, 
+                    Niveles: niveles, 
+                    Estado: estado,
+                        };
+                antena.push(antenas); 
+
+                celda1.innerHTML = antena.length; 
+                celda2.innerHTML = nombre; 
+                celda3.innerHTML = ubicacion;
+                celda4.innerHTML = document.getElementById("vlan1").value;
+                celda5.innerHTML = document.getElementById("vlan2").value;
+                celda6.innerHTML = document.getElementById("vlan3").value;
+                celda7.innerHTML = document.getElementById("vlan4").value;
+                celda8.innerHTML = document.getElementById("niveles1").value;
+                celda9.innerHTML = document.getElementById("niveles2").value;
+                celda10.innerHTML = document.getElementById("estado").value; 
+                formulario.reset();
+
+                document.getElementById("cantidadE").innerHTML = antena.length; 
+                console.log(antenas);
+            } else {
+                alert("intente de nuevo y no deje datos sin llenar");
+                document.getElementById("nombre").value = "";
+                document.getElementById("ubicacion").value = ""; 
+                document.getElementById("vlan1").value = "";
+                document.getElementById("vlan2").value = ""; 
+                document.getElementById("vlan3").value = "";
+                document.getElementById("vlan4").value = ""; 
+                document.getElementById("niveles1").value = "";
+                document.getElementById("niveles2").value = ""; 
+                document.getElementById("estado").value = "";
+            }
+        } 
+
+        /*El código está definiendo una función llamada "mejorSNR" que realiza las siguientes tareas:
+        1. Elimina todas las filas excepto la primera de una tabla con el ID "tbSNR".
+        2. Encuentra la antena con la mejor SNR (relación señal/ruido) iterando a través de un conjunto de antenas y comparando 
+           su SNR con la de la otra antena.antenas y comparando sus valores SNR.
+        3.Inserta una nueva fila en la tabla con el ID "tbSNR" y la rellena con el ID, SNR y nombre de la antena con el mejor SNR. 
+           de la antena con el mejor SNR.*/
+
+        function mejorSNR() {
+            var tabla = document.getElementById("tbSNR"); 
+            var rowCount = tabla.rows.length; // Eliminar las filas  una por una 
+            for (var i = rowCount - 1; i > 0; i--) {
+                tabla.deleteRow(i);
+            }
+            MejorSNR = null;
+            for (i = 0; i < antena.length; i++) {
+                if (!MejorSNR || antena[i].Niveles.snr < MejorSNR) {
+                    MejorSNR = antena[i].Niveles.snr; 
+                    nombre = antena[i].nombre; 
+                    ID = antena[i].id;
+                }
+            } 
+
+            console.log(ID);
+            console.log(MejorSNR); 
+            console.log(nombre); 
+            var table = document.getElementById("tbSNR").getElementsByTagName("tbody")[0]; //inserta fila en orden de su llegada a la tabla
+            var row = table.insertRow(-1); //inserta celdas 
+            var celda1 = row.insertCell(0); 
+            var celda2 = row.insertCell(1); 
+            var celda3 = row.insertCell(2); 
+
+            celda1.innerHTML = ID; 
+            celda2.innerHTML = MejorSNR;
+            celda3.innerHTML = nombre;
+
+        } 
+
+        /*El código está definiendo una función llamada "mejorPERF" que realiza las siguientes tareas:
+        1. Elimina todas las filas de una tabla con el ID "tbPerf".
+        2. Evalúa cada elemento de un array llamado "antena" para determinar los mejores niveles.
+        3. Imprime el ID, el nombre, la ubicación, el mejor rendimiento y el estado del mejor elemento en la consola. consola.
+        4. Inserta una nueva fila en la tabla "tbPerf" con el ID, nombre, ubicación, servicios, mejor rendimiento y estado del 
+            mejor elemento. y estado del mejor elemento.*/
+
+        function mejorPERF() {
+            // Eliminar las filas una por una 
+            var tabla = document.getElementById("tbPerf"); var
+                rowCount = tabla.rows.length; 
+                for (var i=rowCount - 1; i> 0; i--) {
+                tabla.deleteRow(i);
+                }
+            // Evaluacion de cada item para determinar los mejores niveles
+            MejorPERF = null;
+            for (i = 0; i < antena.length; i++) {
+            let _MejorPERF = antena[i].Niveles.throughput / antena[i].Niveles.snr;
+            if (!MejorPERF || _MejorPERF > MejorPERF) {
+                MejorPERF = _MejorPERF;
+                nombre = antena[i].nombre;
+                ID = antena[i].id;
+                ubicacion = antena[i].ubicacion;
+                estado = antena[i].Estado;
+                Servicios = antena[i].Vlan;
+                }
+            }
+        // impresion en consola
+         console.log(ID);
+         console.log(nombre);
+         console.log(ubicacion);
+         console.log(MejorPERF);
+         console.log(estado);
+
+        // LLenado de tabla
+         var table = document.getElementById("tbPerf").getElementsByTagName("tbody")[0]; //inserta fila en orden de su llegada a la tabla
+         var row = table.insertRow(-1); //inserta celdas
+         var celda1 = row.insertCell(0);
+         var celda2 = row.insertCell(1);
+         var celda3 = row.insertCell(2);
+         var celda4 = row.insertCell(3);
+         var celda5 = row.insertCell(4);
+         var celda6 = row.insertCell(5);
+
+         celda1.innerHTML = ID;
+         celda2.innerHTML = nombre;
+         celda3.innerHTML = ubicacion;
+         celda4.innerHTML = Servicios;
+         celda5.innerHTML = MejorPERF;
+         celda6.innerHTML = estado;
+        }
+                
+        /* El código anterior está definiendo una función JavaScript llamada "limpiar" que muestra un mensaje de confirmación 
+        preguntando al usuario si desea limpiar todos los datos. Si el usuario pulsa "OK", la página se recarga y se muestra 
+        un mensaje de éxito. Si el usuario hace clic en "Cancelar", se muestra un mensaje indicando que debe seguir trabajando.*/
+
+        function limpiar() {
+            var resultado = confirm("Desea realmente liberar todos los datos?");
+            if (resultado) {
+                location.reload();
+                alert("Datos liberados con éxito")
+                console.log("Se selecciono Aceptar");
+            } else {
+                alert("Seguir en área de trabajo")
+                console.log("Se selecciono Cancelar");
+            }
+        }
+    </script>
+</head>
+
+<body id="cuerpo" style="background-color: rgba(28, 36, 36, 0.727);">
+    <p></p><br><br>
+    <header class="encabezado">
+        <div class="col" style="text-align: center;">
+        <div class="container">
+            <label class="a"><h1>Radio enlaces PMP</h1></label>
+        </div>
+    </div>
+    </header>
+    <p></p><br><br><br>
+    
+    <!-- El siguiente código está creando un carrusel de imágenes usando HTML y CSS. Las imágenes se muestran en un contenedor 
+        flex con una altura de 20rem y un espacio de 1rem. Cada imagen tiene una imagen de fondo establecida usando CSS en línea 
+        y se le da un valor flex de 1. Cuando se pasa el puntero del ratón sobre una imagen, ésta aumenta de tamaño usando 
+        la propiedad flex. tamaño utilizando la propiedad flex. Además, cuando se pasa el ratón por encima de una imagen, 
+        se le aplica un filtro de opacidad(.5) para crear un efecto visual. -->
+    <div class="container">
+        <div id="accordion" class="d-grid gap-3">
+            <div class="carrusel">
+                <div style="background-image: url(/antena1.PNG);" class="carrusel1"></div>
+                <div style="background-image: url(/antena2.PNG);" class="carrusel2"></div>
+                <div style="background-image: url(/antena3.PNG);" class="carrusel3"></div>
+                <div style="background-image: url(/antena4.PNG);" class="carrusel4"></div>
+                <div style="background-image: url(/antena5.PNG);" class="carrusel5"></div>
+            </div>
+            <style>
+            .carrusel {
+                display: flex;
+                height: 20rem;
+                gap: 1rem
+            }    
+            .carrusel > div{
+                flex: 1;
+                border-radius: 1 rem;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: auto 100%;
+                transition: all .8s cubic-bezier(.25, .4, .45, 1.4);
+            }
+            .carrusel > div:hover{
+                flex: 5;
+            }
+
+            .carrusel1:hover, .carrusel2:hover, .carrusel3:hover, .carrusel4:hover, .carrusel5:hover{
+                filter: opacity(.5);
+                transition:all .5s ease-in-out;
+
+            }
+            
+        </style>
+            <div class="p-2 bg-light border">
+                <div class="col" style="text-align: center;">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Ingresar Datos de Radio Enlaces
+                        </button>
+                    </h5>
+                </div>
+                </div>
+                <div class="form-row">
+                    <div class="collapse" id="collapseExample" style="text-align: center;">
+                        <div class="card card-body">
+                            <form id="formulario" style="text-align: center;">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Nombre del sitio"
+                                            id="nombre">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Ubicacion del Radio enlace"
+                                            id="ubicacion">
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3>Seleccione los servicio del radio enlace</h2>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <select class="custom-select" selected id="vlan1">
+                                            <option>Seleccione Vlan 1</option>
+                                            <option value="20">20</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="100">100</option>
+                                            <option value="554">554</option>
+                                            <option value="927">927</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select class="custom-select" selected id="vlan2">
+                                            <option>Seleccione Vlan 2</option>
+                                            <option value="20">20</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="100">100</option>
+                                            <option value="554">554</option>
+                                            <option value="927">927</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select class="custom-select" selected id="vlan3">
+                                            <option>Seleccione Vlan 3</option>
+                                            <option value="20">20</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="100">100</option>
+                                            <option value="554">554</option>
+                                            <option value="927">927</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select class="custom-select" selected id="vlan4">
+                                            <option>Seleccione Vlan 4</option>
+                                            <option value="20">20</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="100">100</option>
+                                            <option value="554">554</option>
+                                            <option value="927">927</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3>Parametros de radio enlace</h2>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Throughput" id="niveles1">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="SNR" id="niveles2">
+                                    </div>
+                                    <div class="col">
+                                        <select class="custom-select" id="estado">
+                                            <option selected>Elegir</option>
+                                            <option value="Habilitado">Habilitado</option>
+                                            <option value="Deshabilitado">Inhabilitado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <br>
+                            <button type="button" class="btn btn-dark" onclick="cargarDatos()">Cargar</button>
+                            <br>
+                        </div>
+                        <br>
+                        <span class="border border-2">
+                            <table class="table table-dark" id="tbGeneral">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Ubicacion</th>
+                                        <th>Vlan1</th>
+                                        <th>Vlan2</th>
+                                        <th>Vlan3</th>
+                                        <th>Vlan4</th>
+                                        <th>Performance</th>
+                                        <th>SNR</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <table class="table table-striped" id="tbSNR">
+                            <thead>
+                                <h4>
+                                    Mejor SNR
+                                    </h3>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Valor SNR</th>
+                                        <th>Nombre</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <br>
+                        <button type="button" class="btn btn-dark" onclick="mejorSNR()">Mejor SNR</button>
+                        <br>
+                    </div>
+                    <div>
+                        <table class="table table-success table-striped" id="tbPerf">
+                            <thead>
+                                <h4>
+                                    Mejor Performance
+                                    </h3>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Ubicacion</th>
+                                        <th>Servicios</th>
+                                        <th>Niveles</th>
+                                        <th>Estado</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <br>
+                        <button type="button" class="btn btn-dark" onclick="mejorPERF()">Mejor Performance</button>
+                        <br>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div>
+                <button type="button" class="btn btn-dark" onclick="limpiar()">Limpiar</button>
+            </div>
+            <br>
+            <div>
+                <label for="cantidadE" style="color: antiquewhite;"><h2> Cantidad de Radio Enlaces: </h2></label>
+                <label id="cantidadE" class="cantEnlaces" style="color:beige"><h3></h3></label>
+                <p></p>
+                <!--  El código anterior muestra una imagen de una persona llamada Diego Armando Zaraza luque y su nombre 
+                    deletreado usando letras individuales estilizadas con CSS. Al pasar el ratón sobre la imagen, se le 
+                    aplica un efecto de desenfoque usando CSS.  -->
+                <style>
+                .img-thumbnail:hover{
+                    filter: blur(5px);
+                    transition:all .5s ease-in-out;
+                    }
+                </style>
+                <figure class="text-center">
+                    <img src="/index.html" class="img-thumbnail">
+                    <blockquote class="blockquote">
+                        <div class="nombreLetra">
+                            <div class="letra"><h2>D</h2></div>
+                            <div class="letra">I</div>
+                            <div class="letra">E</div>
+                            <div class="letra">G</div>
+                            <div class="letra">O</div>
+                            <div class="letra"><h2>A</h2></div>
+                            <div class="letra">R</div>
+                            <div class="letra">M</div>
+                            <div class="letra">A</div>
+                            <div class="letra">N</div>
+                            <div class="letra">D</div>
+                            <div class="letra">O</div>
+                            <div class="letra"><h2>Z</h2></div>
+                            <div class="letra">A</div>
+                            <div class="letra">R</div>
+                            <div class="letra">A</div>
+                            <div class="letra">Z</div>
+                            <div class="letra">A</div>
+                            <div class="letra"><h2>L</h2></div>
+                            <div class="letra">U</div>
+                            <div class="letra">Q</div>
+                            <div class="letra">U</div>
+                            <div class="letra">E</div>
+                        </div>
+                    </blockquote>
+                    <figcaption class="blockquote-footer" style="color: antiquewhite;">
+                        <h3> UTS </h3><cite title="Título fuente"><h3>E161</h3></cite>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+        <footer>
+        </footer>
+</body>
+</html>
